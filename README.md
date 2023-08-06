@@ -1,4 +1,4 @@
-# S2FCN
+# CSFCN
 By Kaige Li, Qichuan Geng, Maoxian Wan, Xiaochun Cao, Senior Member, IEEE, and Zhong Zhou. This repository is an official implementation of the paper "Context and Spatial Feature Calibration for Real-Time Semantic Segmentation".
 
 ## Highlights
@@ -7,7 +7,7 @@ By Kaige Li, Qichuan Geng, Maoxian Wan, Xiaochun Cao, Senior Member, IEEE, and Z
   <span align="center">Comparison of inference speed and accuracy for real-time models on test set of Cityscapes.</span> 
 </p>
 
-* **Towards Real-time Applications**: SANet could be directly used for the real-time applications, such as autonomous vehicle and medical imaging.
+* **Towards Real-time Applications**: S2FCN could be directly used for the real-time applications, such as autonomous vehicle and medical imaging.
 * **A Novel and Efficient Decoder**: a novel Scale-Aware Decoder is introduced to construct features containing scale-specific information for each position via selective context encoding and feature fusion.
 * **More Accurate and Faster**: SANet presents 78.1% mIOU with speed of 109.0 FPS on Cityscapes test set and 77.2% mIOU with speed of 250.4 FPS on CamVid test set.
 
