@@ -45,7 +45,7 @@ CFC and SFC blocks are responsiable for context feature calibration, spatial fea
 
 ## Metrics
 
-We append 50, 75 and 100 after the network name to represent the input sizes of 512 X 1024, 768 X 1536 and 1024 X 2048, respectively.
+We append 50, 75 and 100 after the network name to represent the input sizes of 512 × 1024, 768 × 1536 and 1024 × 2048, respectively.
 
 | Model (Cityscapes) | Val (% mIOU) |Test (% mIOU)| FPS (GTX 1080 Ti) |
 |:-:|:-:|:-:|:-:|
