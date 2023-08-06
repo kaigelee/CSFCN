@@ -40,11 +40,11 @@ A demo of the segmentation performance of our proposed CSFCNs: Predictions of CS
 
 Because we plan to embed our method into the robot designed by our research group to improve its ability to understand the scene. Therefore, we plan to migrate our CSFCN to TensorRT, and test the speed on embedded systems NVIDIA Jetson AGX Xavier and NVIDIA GTX 1080Ti, respectively.
 
-| Model (Cityscapes) | Test (% mIOU)| FPS (GTX 1080 Ti) |
-|:-:|:-:|:-:|
-| CSFCN-50 |  73.8 | 229.1 |
-| CSFCN-75 | 77.2 | 122.2  |
-| CSFCN-100 | 78.7 | 70.0 |
+| Model (Cityscapes) | Val (% mIOU) |Test (% mIOU)| FPS (GTX 1080 Ti) |
+|:-:|:-:|:-:|:-:|
+| CSFCN-50 | 73.8 | 73.8 | 229.1 |
+| CSFCN-75 | 73.8 |77.2 | 122.2  |
+| CSFCN-100 | 79.0 |78.7 | 70.0 |
 
 :bell: Our Cityscapes pre-trained CSFCN obtains 81.0% mIoU on the CamVid set.
 
