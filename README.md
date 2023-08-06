@@ -36,6 +36,13 @@ A demo of the segmentation performance of our proposed CSFCNs: Predictions of CS
   <span align="center">Cityscapes Stuttgart demo video #2</span>
 </p>
 
+## Overview
+<p align="center">
+  <img src="figs/csfcn.png" alt="overview-of-our-method" width="800"/></br>
+  <span align="center">An overview of the basic architecture of our proposed Context and Spatial Feature Calibration Network (SCFCN). </span> 
+</p>
+P, I and D branches are responsiable for detail preservation, context embedding and boundary detection, respectively.
+
 ## Metrics
 
 Because we plan to embed our method into the robot designed by our research group to improve its ability to understand the scene. Therefore, we plan to migrate our CSFCN to TensorRT, and test the speed on embedded systems NVIDIA Jetson AGX Xavier and NVIDIA GTX 1080Ti, respectively.
