@@ -42,8 +42,8 @@ Because we plan to embed our method into the robot designed by our research grou
 
 | Model (Cityscapes) | Val (% mIOU) |Test (% mIOU)| FPS (GTX 1080 Ti) |
 |:-:|:-:|:-:|:-:|
-| CSFCN-50 | 73.8 | 73.8 | 229.1 |
-| CSFCN-75 | 73.8 |77.2 | 122.2  |
+| CSFCN-50 | - | 73.8 | 229.1 |
+| CSFCN-75 | - |77.2 | 122.2  |
 | CSFCN-100 | 79.0 |78.7 | 70.0 |
 
 :bell: Our Cityscapes pre-trained CSFCN obtains 81.0% mIoU on the CamVid set.
