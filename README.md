@@ -48,7 +48,8 @@ Because we plan to embed our method into the robot designed by our research grou
 
 | Model (CamVid) | Val (% mIOU) | Test (% mIOU)| FPS (RTX 3090) |
 |:-:|:-:|:-:|:-:|
-| CSFCN |-| 77.2 | 250.4 |
+| CSFCN |-| 77.8 | 179.2 |
+| CSFCN (Pretrained on Cityscapes) |-| 81.0 | 179.2 |
 
 
 ## Setup Environment
