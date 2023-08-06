@@ -3,7 +3,7 @@ By Kaige Li, Qichuan Geng, Maoxian Wan, Xiaochun Cao, Senior Member, IEEE, and Z
 
 ## Highlights
 <p align="center">
-  <img src="figs/city_score.jpg" alt="overview-of-our-method" width="500"/></br>
+  <img src="figs/city_score.png" alt="overview-of-our-method" width="500"/></br>
   <span align="center">Comparison of inference speed and accuracy for real-time models on test set of Cityscapes.</span> 
 </p>
 
