@@ -14,7 +14,7 @@ feature misalignment via pooling-based and sampling-based attention mechanisms.
 
 ## News
 
-:bell: Good News! I achieved an mIoU of [78.2998](https://www.cityscapes-dataset.com/anonymous-results/?id=4b20f9c0105bedd70b73d5e841ec523f6950314bb65db013c3311674c88e1428) in the newest experbiment by removing Gaussian blur during data augmentation. (the experiment is still running and the final mIoU may be even higher)! Now, the data augmentation process includes
+:bell: Good News! I achieved an mIoU of (pending) in the newest experbiment by removing Gaussian blur during data augmentation. (the experiment is still running and the final mIoU may be even higher)! Now, the data augmentation process includes
 
 - [ ] random cropping
 - [ ] random horizontal flipping 
