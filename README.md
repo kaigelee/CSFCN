@@ -45,7 +45,7 @@ CFC and SFC blocks are responsiable for context feature calibration, spatial fea
 
 ## Metrics
 
-Because we plan to embed our method into the robot designed by our research group to improve its ability to understand the scene. Therefore, we plan to migrate our CSFCN to TensorRT, and test the speed on embedded systems NVIDIA Jetson AGX Xavier and NVIDIA GTX 1080Ti, respectively.
+We append 50, 75 and 100 after the network name to represent the input sizes of 512 X 1024, 768 X 1536 and 1024 X 2048, respectively.
 
 | Model (Cityscapes) | Val (% mIOU) |Test (% mIOU)| FPS (GTX 1080 Ti) |
 |:-:|:-:|:-:|:-:|
