@@ -14,7 +14,7 @@ feature misalignment via pooling-based and sampling-based attention mechanisms.
 
 ## News
 
-:bell: Good News! I achieved an mIoU of (pending) in the newest experbiment by removing Gaussian blur during data augmentation. (the experiment is still running and the final mIoU may be even higher)! Now, the data augmentation process includes
+:bell: Good News! In follow-up experiments, we found that higher performance can be achieved by removing Gaussian blur during data augmentation. (The experiment is still in progress, the final mIoU may be higher than 78.7%)! Now, the data augmentation process includes:
 
 - [ ] random cropping
 - [ ] random horizontal flipping 
