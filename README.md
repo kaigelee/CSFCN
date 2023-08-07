@@ -117,7 +117,7 @@ python tools/eval.py --cfg configs/CSFCN_camvid.yaml \
 ````
 * Generate the testing results of CSFCN on Cityscapes test set:
 ````bash
-python tools/eval.py --cfg configs/CSFCN_cityscapes_trainval.yaml \
+python tools/submit.py --cfg configs/CSFCN_cityscapes_trainval.yaml \
                           TEST.MODEL_FILE pretrained_models/cityscapes/CSFCN_trainval_best_model.pt 
 ````
 
