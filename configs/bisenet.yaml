@@ -1,0 +1,27 @@
+### 1.Model
+model:
+  name: "bisenet"
+  backbone: "resnet18"
+  base_size: 1024    # during augentation, shorter size will be resized between [base_size*0.5, base_size*2.0]
+  crop_size: 1024     # end of augmentation, crop to trainning
+
+### 2.Optimizer
+optimizer:
+  init_lr: 0.01
+  momentum: 0.9
+  weight_decay: 0.0005
+
+### 3.Trainning
+train:
+  specific_gpu_num: "0"     # for example: "0", "1" or "0, 1"
+  train_batch_size: 12      # adjust according to gpu resources
+  valid_batch_size: 1
+  cityscapes_root: "/data/cityscapes"
+  epochs: 480
+  log_iter: 10        # print log every log-iter
+  val_epoch: 1        # run validation every val-epoch
+  ckpt_dir: "./saved/ckpt" # ckpt and trainning log will be saved here
+
+### 4.Test42-
+test:
+  ckpt_path: "./ckpt/bisenet_best_model.pth" # set the pretrained model path correctly
