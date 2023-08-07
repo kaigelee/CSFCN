@@ -60,7 +60,7 @@ We append 50, 75 and 100 after the network name to represent the input sizes of 
 
 :bell: Our Cityscapes pre-trained CSFCN obtains 81.0% mIoU on the CamVid set.
 
-| Model (CamVid) | Val (% mIOU) | Test (% mIOU)| FPS (RTX 3090) |
+| Model (CamVid) | Val (% mIOU) | Test (% mIOU)| FPS (GTX 1080 Ti) |
 |:-:|:-:|:-:|:-:|
 | CSFCN |-| 77.8 | 179.2 |
 | CSFCN-P |-| 81.0 | 179.2 |
