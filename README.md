@@ -25,7 +25,12 @@ feature misalignment via pooling-based and sampling-based attention mechanisms.
 
 ## Demos
 
-A demo of the segmentation performance of our proposed CSFCNs: Predictions of CSFCN-100 (left) and CSFCN-50 (right).
+A demo of the segmentation performance of our proposed CSFCNs: Predictions of CSFCN-100 (left), CSFCN-75 (middle), and CSFCN-50 (right).
+<p align="center">
+  <img src="figs/video0_all.gif" alt="Cityscapes" width="800"/></br>
+  <span align="center">Cityscapes Stuttgart demo video #0</span>
+</p>
+
 <p align="center">
   <img src="figs/video1_all.gif" alt="Cityscapes" width="800"/></br>
   <span align="center">Cityscapes Stuttgart demo video #1</span>
