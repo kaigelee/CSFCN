@@ -65,7 +65,7 @@ if __name__ == '__main__':
     # Comment batchnorms here and in model_utils before testing speed since the batchnorm could be integrated into conv operation
     # (do not comment all, just the batchnorm following its corresponding conv layer)
     device = torch.device('cuda')
-    model = get_pred_model(name='SANet', num_classes=19)
+    model = get_pred_model(name='CSFCN', num_classes=19)
     model.eval()
     model.to(device)
     iterations = None
