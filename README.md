@@ -108,17 +108,17 @@ python tools/trainval.py --cfg configs/CSFCN_cityscapes_trainval.yaml
 * For example, evaluate the CSFCN on Cityscapes val set:
 ````bash
 python tools/eval.py --cfg configs/CSFCN_cityscapes.yaml \
-                          TEST.MODEL_FILE pretrained_models/cityscapes/CSFCN_Cityscapes_test.pt
+                          TEST.MODEL_FILE pretrained_models/cityscapes/CSFCN_best_model.pt
 ````
 * Or, evaluate the CSFCN on CamVid test set:
 ````bash
 python tools/eval.py --cfg configs/CSFCN_camvid.yaml \
-                          TEST.MODEL_FILE pretrained_models/camvid/CSFCN_Camvid_test.pt
+                          TEST.MODEL_FILE pretrained_models/camvid/CSFCN_camvid_best_model.pt
 ````
 * Generate the testing results of CSFCN on Cityscapes test set:
 ````bash
 python tools/eval.py --cfg configs/CSFCN_cityscapes_trainval.yaml \
-                          TEST.MODEL_FILE pretrained_models/cityscapes/CSFCN_trainval_Cityscapes_test.pt 
+                          TEST.MODEL_FILE pretrained_models/cityscapes/CSFCN_trainval_best_model.pt 
 ````
 
 ### 3. Speed Measurement
@@ -143,7 +143,7 @@ python models/speed/CSFCN_speed.py --c 11 --r 720 960
 
 * Put all your images in `samples/` and then run the command below using Cityscapes pretrained CSFCN for image format of .png:
 ````bash
-python tools/custom.py --p '../pretrained_models/cityscapes/CSFCN_Cityscapes_test.pth' --t '*.png'
+python tools/custom.py --p '../pretrained_models/cityscapes/CSFCN_best_model.pth' --t '*.png'
 ````
 
 
