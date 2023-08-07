@@ -2,7 +2,7 @@
 2022-06-24 21:04:44,284 semantic_segmentation INFO: torch.cuda.is_available(): True
 2022-06-24 21:04:44,284 semantic_segmentation INFO: torch.cuda.device_count(): 1
 2022-06-24 21:04:44,284 semantic_segmentation INFO: torch.cuda.current_device(): 0
-2022-06-24 21:04:44,284 semantic_segmentation INFO: {'model': {'name': 'PixelFT_1', 'backbone': 'resnet18', 'base_size': 1024, 'crop_size': 1024}, 'optimizer': {'init_lr': 0.01, 'momentum': 0.9, 'weight_decay': 0.0005}, 'train': {'specific_gpu_num': '0', 'train_batch_size': 12, 'valid_batch_size': 1, 'cityscapes_root': 'D:/cityscapes', 'epochs': 480, 'log_iter': 10, 'val_epoch': 1, 'ckpt_dir': './2022/'}, 'test': {'ckpt_path': './ckpt/icnet_resnet50_129_0.699_best_model.pth'}}
+2022-06-24 21:04:44,284 semantic_segmentation INFO: {'model': {'name': 'SFC(G=2)', 'backbone': 'resnet18', 'base_size': 1024, 'crop_size': 1024}, 'optimizer': {'init_lr': 0.01, 'momentum': 0.9, 'weight_decay': 0.0005}, 'train': {'specific_gpu_num': '0', 'train_batch_size': 12, 'valid_batch_size': 1, 'cityscapes_root': 'D:/cityscapes', 'epochs': 480, 'log_iter': 10, 'val_epoch': 1, 'ckpt_dir': './saved/'}, 'test': {'ckpt_path': './ckpt/SFC(G=2)_best_model.pth'}}
 2022-06-24 21:04:46,994 semantic_segmentation INFO: Start training, Total Epochs: 480 = Total Iterations 119040
 2022-06-24 21:05:12,092 semantic_segmentation INFO: Epochs: 1/480 || Iters: 10/119040 || Lr: 0.003360 || Loss: 3.0208 || mIoU: 0.0187 || Cost Time: 0:00:25 || Estimated Time: 3 days, 10:22:01
 2022-06-24 21:05:20,769 semantic_segmentation INFO: Epochs: 1/480 || Iters: 20/119040 || Lr: 0.003387 || Loss: 2.7801 || mIoU: 0.0275 || Cost Time: 0:00:33 || Estimated Time: 2 days, 7:37:08
