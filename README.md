@@ -12,7 +12,7 @@ By Kaige Li, Qichuan Geng, Maoxian Wan, Xiaochun Cao, Senior Member, IEEE, and Z
 feature misalignment via pooling-based and sampling-based attention mechanisms.
 * **More Accurate and Faster**: CSFCN presents 78.7% mIOU with speed of 70.0 FPS on Cityscapes test set and 77.8% mIOU with speed of 179.2 FPS on CamVid test set.
 
-## News
+## Updates
 
 :bell: Good News! In the follow-up experiments, we found that higher performance can be achieved by **removing Gaussian blur** during data augmentation. (The experiment is still in progress, the final mIoU may be higher than 78.7%)! Now, the data augmentation process includes:
 
