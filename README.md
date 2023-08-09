@@ -13,13 +13,8 @@ feature misalignment via pooling-based and sampling-based attention mechanisms.
 * **More Accurate and Faster**: CSFCN presents 78.7% mIOU with speed of 70.0 FPS on Cityscapes test set and 77.8% mIOU with speed of 179.2 FPS on CamVid test set.
 
 ## 🎉 Updates 🎉
-
-Good News! In the follow-up experiments, we found that higher performance can be achieved by **removing Gaussian blur** during data augmentation. (The experiment is still in progress, the final mIoU may be higher than 78.7%)! Now, the data augmentation process includes:
-
-- [ ] random cropping
-- [ ] random horizontal flipping 
-- [ ] random scaling
-- [ ] color jitter
+   - Our paper is undergoing a second peer review. In the meantime, we have prepared a preprint and will post a link to it soon. (Aug/06/2023)
+   - The overview, training logs, and some codes for CSFCN are available here. (Aug/08/2022)
 
 
 
