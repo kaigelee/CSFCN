@@ -14,7 +14,7 @@ feature misalignment via pooling-based and sampling-based attention mechanisms.
 
 ## 🎉 Updates 🎉
 
-:bell: Good News! In the follow-up experiments, we found that higher performance can be achieved by **removing Gaussian blur** during data augmentation. (The experiment is still in progress, the final mIoU may be higher than 78.7%)! Now, the data augmentation process includes:
+Good News! In the follow-up experiments, we found that higher performance can be achieved by **removing Gaussian blur** during data augmentation. (The experiment is still in progress, the final mIoU may be higher than 78.7%)! Now, the data augmentation process includes:
 
 - [ ] random cropping
 - [ ] random horizontal flipping 
@@ -50,7 +50,7 @@ CFC and SFC blocks are responsiable for context feature calibration, spatial fea
 
 ## Metrics
 
-We append 50, 75 and 100 after the network name to represent the input sizes of 512 × 1024, 768 × 1536 and 1024 × 2048, respectively.
+:bell: We append 50, 75 and 100 after the network name to represent the input sizes of 512 × 1024, 768 × 1536 and 1024 × 2048, respectively.
 
 | Model (Cityscapes) | Val (% mIOU) |Test (% mIOU)| FPS (GTX 1080 Ti) |
 |:-:|:-:|:-:|:-:|
