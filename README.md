@@ -8,7 +8,7 @@ By Kaige Li, Qichuan Geng, Maoxian Wan, Xiaochun Cao, Senior Member, IEEE, and Z
 </p>
 
 * **Towards Real-time Applications**: S2FCN could be directly used for the real-time applications, such as autonomous vehicle and medical imaging.
-* **A Novel and Efficient Decoder**: a novel and efficient, Context and Spatial Decoder is introduced to deal with the problems of pixel-context mismatch and spatial
+* **A Novel and Efficient Decoder**: a Context and Spatial Decoder is introduced to deal with the problems of pixel-context mismatch and spatial
 feature misalignment via pooling-based and sampling-based attention mechanisms.
 * **More Accurate and Faster**: CSFCN presents 78.7% mIOU with speed of 70.0 FPS on Cityscapes test set and 77.8% mIOU with speed of 179.2 FPS on CamVid test set.
 
