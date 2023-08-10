@@ -60,6 +60,10 @@ CFC and SFC blocks are responsiable for context feature calibration, spatial fea
 | CSFCN |-| 77.8 | 179.2 |
 | CSFCN-P |-| 81.0 | 179.2 |
 
+The inference time is measured under torch 1.7.1, CUDA 11.0, and CUDNN 7.6.5 on a single NVIDIA GTX 1080Ti GPU card with a batch size 1.
+
+
+
 
 ## Setup Environment
 
