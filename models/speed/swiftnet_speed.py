@@ -406,10 +406,10 @@ class ResNet(nn.Module):
         return x, skip
 
     def forward_down(self, image):
-        if hasattr(self, 'img_scale'):
-            image /= self.img_scale
-        image -= self.img_mean
-        image /= self.img_std
+        # if hasattr(self, 'img_scale'):
+        #     image /= self.img_scale
+        # image -= self.img_mean
+        # image /= self.img_std
 
         x = self.conv1(image)
         # x = self.bn1(x)
