@@ -501,7 +501,7 @@ if __name__ == '__main__':
     print(model)
     iterations = None
 
-    input = torch.randn(1, 3, 256, 512).cuda()
+    input = torch.randn(1, 3, 1024, 2048).cuda()
     with torch.no_grad():
         for _ in range(20):
             model(input)
@@ -538,7 +538,6 @@ if __name__ == '__main__':
 
         for _ in range(iterations):
             out = model(input)
-            out = F.interpolate(out,size=(1024,2048))
 
         torch.cuda.synchronize()
         # torch.cuda.synchronize()
