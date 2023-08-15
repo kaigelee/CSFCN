@@ -15,7 +15,7 @@ feature misalignment via pooling-based and sampling-based attention mechanisms.
 ## 🎉 Updates 🎉
    - Our paper is undergoing a second peer review. In the meantime, we have prepared a preprint and will post a link to it soon. (Aug/06/2023)
    - The overview, training logs, and some codes for CSFCN are available here. (Aug/08/2022)
-   - We reproduced the network files of [SFANet](https://ieeexplore.ieee.org/abstract/document/9583294) and MGSeg for speed comparison with them. (Aug/16/2022)
+   - We reproduced the network files of [SFANet](https://ieeexplore.ieee.org/abstract/document/9583294) and [MGSeg](https://ieeexplore.ieee.org/abstract/document/9511235) for speed comparison with them. (Aug/16/2022)
 
 
 
