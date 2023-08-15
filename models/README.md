@@ -5,8 +5,9 @@
 
 ## Updates
 
-- We initially reproduced SFANet and MGSeg based on the original papers for a detailed comparison with them.
 - The code for our method will be open-sourced after review.
+- We initially reproduced SFANet and MGSeg based on the original papers for a detailed comparison with them.
+
 
 
 ## References
