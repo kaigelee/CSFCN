@@ -10,8 +10,6 @@
 
 ## References
 
-If you find this work helpful to your research, please consider citing the paper:
-
 ```bibtex
 @article{weng2021stage,
   title={Stage-aware feature alignment network for real-time semantic segmentation of street scenes},
