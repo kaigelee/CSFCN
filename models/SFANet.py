@@ -4,188 +4,13 @@
 
 #!/usr/bin/python
 # -*- encoding: utf-8 -*-
-import torch
-import torch.nn as nn
+
 import torch.nn.functional as F
 import torchvision
 from torch.nn import BatchNorm2d
 import torch
 from torch import nn
 from torch.nn.parameter import Parameter
-
-class eca_layer(nn.Module):
-    """Constructs a ECA module.
-
-    Args:
-        channel: Number of channels of the input feature map
-        k_size: Adaptive selection of kernel size
-    """
-    def __init__(self, channel, k_size=3):
-        super(eca_layer, self).__init__()
-        self.avg_pool = nn.AdaptiveAvgPool2d(1)
-        self.conv = nn.Conv1d(1, 1, kernel_size=k_size, padding=(k_size - 1) // 2, bias=False)
-        self.sigmoid = nn.Sigmoid()
-        self.init_weight()
-
-    def forward(self, x):
-        # feature descriptor on the global spatial information
-        y = self.avg_pool(x)
-
-        # Two different branches of ECA module
-        y = self.conv(y.squeeze(-1).transpose(-1, -2)).transpose(-1, -2).unsqueeze(-1)
-
-        # Multi-scale information fusion
-        y = self.sigmoid(y)
-
-        return y
-    def init_weight(self):
-        for ly in self.children():
-            if isinstance(ly, nn.Conv2d):
-                nn.init.kaiming_normal_(ly.weight, a=1)
-                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
-
-    def get_params(self):
-        wd_params, nowd_params = [], []
-        for name, module in self.named_modules():
-            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
-                wd_params.append(module.weight)
-                if not module.bias is None:
-                    nowd_params.append(module.bias)
-            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
-                nowd_params += list(module.parameters())
-            elif isinstance(module, nn.modules.normalization.LayerNorm):
-                nowd_params += list(module.parameters())
-        return wd_params, nowd_params
-
-class spatial_layer(nn.Module):
-    """Constructs a ECA module.
-
-    Args:
-        channel: Number of channels of the input feature map
-        k_size: Adaptive selection of kernel size
-    """
-    def __init__(self, channel, k_size=3):
-        super(spatial_layer, self).__init__()
-
-
-        self.sigmoid = nn.Sigmoid()
-        self.init_weight()
-
-    def forward(self, x):
-        # feature descriptor on the global spatial information
-        y = self.avg_pool(x)
-
-        # Two different branches of ECA module
-        y = self.conv(y.squeeze(-1).transpose(-1, -2)).transpose(-1, -2).unsqueeze(-1)
-
-        # Multi-scale information fusion
-        y = self.sigmoid(y)
-
-        return y
-    def init_weight(self):
-        for ly in self.children():
-            if isinstance(ly, nn.Conv2d):
-                nn.init.kaiming_normal_(ly.weight, a=1)
-                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
-
-    def get_params(self):
-        wd_params, nowd_params = [], []
-        for name, module in self.named_modules():
-            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
-                wd_params.append(module.weight)
-                if not module.bias is None:
-                    nowd_params.append(module.bias)
-            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
-                nowd_params += list(module.parameters())
-            elif isinstance(module, nn.modules.normalization.LayerNorm):
-                nowd_params += list(module.parameters())
-        return wd_params, nowd_params
-
-
-class SCA(nn.Module):
-
-    def __init__(self, in_chan, k_size,  *args, **kwargs):
-        super(SCA, self).__init__()
-
-        self.spatial = nn.Sequential(
-            nn.Conv2d(in_chan,
-                in_chan,
-                kernel_size = 1,
-                bias = False),
-            nn.Sigmoid()
-        )
-
-        self.channel = eca_layer(k_size)
-
-        self.init_weight()
-
-    '''
-    64   
-    128 
-    256 
-    512 
-    '''
-    def forward(self, x):
-
-        channel = self.channel(x)
-        spatial = self.spatial(x)
-
-        return x * spatial + x * channel
-
-    def init_weight(self):
-        for ly in self.children():
-            if isinstance(ly, nn.Conv2d):
-                nn.init.kaiming_normal_(ly.weight, a=1)
-                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
-    def get_params(self):
-        wd_params, nowd_params = [], []
-        for name, module in self.named_modules():
-            if isinstance(module, (nn.Linear, nn.Conv2d)):
-                wd_params.append(module.weight)
-                if not module.bias is None:
-                    nowd_params.append(module.bias)
-            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
-                nowd_params += list(module.parameters())
-        return wd_params, nowd_params
-
-
-
-class CBR(nn.Module):
-    """
-    1*1 Convolution Block
-    """
-    def __init__(self, in_ch, out_ch,kernel_size=1,stride=1,padding=0):
-        super(CBR, self).__init__()
-        self.conv = nn.Sequential(
-            nn.Conv2d(in_ch, out_ch, kernel_size=kernel_size, stride=stride, padding=padding,bias=False),
-            nn.BatchNorm2d(out_ch),
-            nn.ReLU(inplace=True)
-        )
-        self.init_weight()
-
-    def forward(self, x):
-        x = self.conv(x)
-        return x
-
-    def init_weight(self):
-        for ly in self.children():
-            if isinstance(ly, nn.Conv2d):
-                nn.init.kaiming_normal_(ly.weight, a=1)
-                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
-
-    def get_params(self):
-        wd_params, nowd_params = [], []
-        for name, module in self.named_modules():
-            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
-                wd_params.append(module.weight)
-                if not module.bias is None:
-                    nowd_params.append(module.bias)
-            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
-                nowd_params += list(module.parameters())
-            elif isinstance(module, nn.modules.normalization.LayerNorm):
-                nowd_params += list(module.parameters())
-        return wd_params, nowd_params
-
 
 import torch
 import torch.nn as nn
@@ -276,6 +101,53 @@ class BottleneckV1b(nn.Module):
 
         return out
 
+class SCA(nn.Module):
+
+    def __init__(self, in_chan, k_size,  *args, **kwargs):
+        super(SCA, self).__init__()
+
+        self.spatial = nn.Sequential(
+            nn.Conv2d(in_chan,
+                in_chan,
+                kernel_size = 1,
+                bias = False),
+            nn.Sigmoid()
+        )
+
+        self.channel = eca_layer(k_size)
+
+        self.init_weight()
+
+    '''
+    64   
+    128 
+    256 
+    512 
+    '''
+    def forward(self, x):
+
+        channel = self.channel(x)
+        spatial = self.spatial(x)
+
+        return x * spatial + x * channel
+
+
+    def init_weight(self):
+        for ly in self.children():
+            if isinstance(ly, nn.Conv2d):
+                nn.init.kaiming_normal_(ly.weight, a=1)
+                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
+    def get_params(self):
+        wd_params, nowd_params = [], []
+        for name, module in self.named_modules():
+            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
+                wd_params.append(module.weight)
+                if not module.bias is None:
+                    nowd_params.append(module.bias)
+            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
+                nowd_params += list(module.parameters())
+        return wd_params, nowd_params
+
 
 class ResNet(nn.Module):
 
@@ -349,7 +221,437 @@ def resnet18_v1c(pretrained=True, **kwargs):
     model = ResNet(BasicBlockV1b, [2, 2, 2, 2], **kwargs)
     return model
 
+class eca_layer(nn.Module):
+    """Constructs a ECA module.
 
+    Args:
+        channel: Number of channels of the input feature map
+        k_size: Adaptive selection of kernel size
+    """
+    def __init__(self, channel, k_size=3):
+        super(eca_layer, self).__init__()
+        self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        self.conv = nn.Conv1d(1, 1, kernel_size=k_size, padding=(k_size - 1) // 2, bias=False)
+        self.sigmoid = nn.Sigmoid()
+        self.init_weight()
+
+    def forward(self, x):
+        # feature descriptor on the global spatial information
+        y = self.avg_pool(x)
+
+        # Two different branches of ECA module
+        y = self.conv(y.squeeze(-1).transpose(-1, -2)).transpose(-1, -2).unsqueeze(-1)
+
+        # Multi-scale information fusion
+        y = self.sigmoid(y)
+
+        return y
+
+
+    def init_weight(self):
+        for ly in self.children():
+            if isinstance(ly, nn.Conv2d):
+                nn.init.kaiming_normal_(ly.weight, a=1)
+                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
+    def get_params(self):
+        wd_params, nowd_params = [], []
+        for name, module in self.named_modules():
+            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
+                wd_params.append(module.weight)
+                if not module.bias is None:
+                    nowd_params.append(module.bias)
+            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
+                nowd_params += list(module.parameters())
+        return wd_params, nowd_params
+
+
+class spatial_layer(nn.Module):
+    """Constructs a ECA module.
+
+    Args:
+        channel: Number of channels of the input feature map
+        k_size: Adaptive selection of kernel size
+    """
+    def __init__(self, channel, k_size=3):
+        super(spatial_layer, self).__init__()
+
+
+        self.sigmoid = nn.Sigmoid()
+        self.init_weight()
+
+    def init_weight(self):
+        for ly in self.children():
+            if isinstance(ly, nn.Conv2d):
+                nn.init.kaiming_normal_(ly.weight, a=1)
+                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
+    def get_params(self):
+        wd_params, nowd_params = [], []
+        for name, module in self.named_modules():
+            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
+                wd_params.append(module.weight)
+                if not module.bias is None:
+                    nowd_params.append(module.bias)
+            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
+                nowd_params += list(module.parameters())
+        return wd_params, nowd_params
+
+
+
+    def forward(self, x):
+        # feature descriptor on the global spatial information
+        y = self.avg_pool(x)
+
+        # Two different branches of ECA module
+        y = self.conv(y.squeeze(-1).transpose(-1, -2)).transpose(-1, -2).unsqueeze(-1)
+
+        # Multi-scale information fusion
+        y = self.sigmoid(y)
+
+        return y
+
+
+class CBR(nn.Module):
+    """
+    1*1 Convolution Block
+    """
+    def __init__(self, in_ch, out_ch,kernel_size=1,stride=1,padding=0):
+        super(CBR, self).__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(in_ch, out_ch, kernel_size=kernel_size, stride=stride, padding=padding,bias=False),
+            nn.BatchNorm2d(out_ch),
+            nn.ReLU(inplace=True)
+        )
+        self.init_weight()
+
+    def forward(self, x):
+        x = self.conv(x)
+        return x
+
+    def init_weight(self):
+        for ly in self.children():
+            if isinstance(ly, nn.Conv2d):
+                nn.init.kaiming_normal_(ly.weight, a=1)
+                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
+
+    def get_params(self):
+        wd_params, nowd_params = [], []
+        for name, module in self.named_modules():
+            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
+                wd_params.append(module.weight)
+                if not module.bias is None:
+                    nowd_params.append(module.bias)
+            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
+                nowd_params += list(module.parameters())
+            elif isinstance(module, nn.modules.normalization.LayerNorm):
+                nowd_params += list(module.parameters())
+            # elif isinstance(module, GeneralizedMeanPooling):
+            #     wd_params += list(module.get_params())
+        return wd_params, nowd_params
+
+
+class FAA(nn.Module):
+    def __init__(self, in_channels, *args, **kwargs):
+
+        super(FAA, self).__init__()
+
+        self.offset = nn.Conv2d(in_channels * 2, 2, 3, stride=1, padding=1,bias=False)
+
+        if in_channels < 512:
+            self.sca = SCA(in_channels,3)
+        else:
+            self.sca = SCA(in_channels,5)
+        self.init_weight()
+
+    def init_weight(self):
+        for ly in self.children():
+            if isinstance(ly, nn.Conv2d):
+                nn.init.kaiming_normal_(ly.weight, a=1)
+                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
+    def get_params(self):
+        wd_params, nowd_params = [], []
+        for name, module in self.named_modules():
+            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
+                wd_params.append(module.weight)
+                if not module.bias is None:
+                    nowd_params.append(module.bias)
+            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
+                nowd_params += list(module.parameters())
+        return wd_params, nowd_params
+
+
+    def forward(self, fh, fl):
+
+        n, _, out_h, out_w = fh.size()
+
+
+        x = torch.cat([fh,fl],dim=1)
+
+        offset = self.offset(x)
+
+
+        norm = torch.tensor([[[[out_w, out_h]]]]).type_as(fh).to(fh.device)
+        w = torch.linspace(-1.0, 1.0, out_h).view(-1, 1).repeat(1, out_w)
+        h = torch.linspace(-1.0, 1.0, out_w).repeat(out_h, 1)
+        grid = torch.cat((h.unsqueeze(2), w.unsqueeze(2)), 2)
+        grid = grid.repeat(n, 1, 1, 1).type_as(fh).to(fh.device)
+
+        grid = grid + offset.permute(0, 2, 3, 1) / norm
+
+        fl = F.grid_sample(fl, grid , align_corners=True)  ## 考虑是否指定align_corners
+
+        fh = self.sca(fh + fl)
+
+        return fh
+
+
+
+class FEB_4(nn.Module):
+    def __init__(self, in_channels, *args, **kwargs):
+
+        super(FEB_4, self).__init__()
+
+        self.dw_conv_1 = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=2,
+                                 dilation=2, groups=in_channels,bias=False)
+
+        self.bn_1 = nn.BatchNorm2d(in_channels)
+
+        self.dw_conv_2 = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=5,
+                                 dilation=5, groups=in_channels,bias=False)
+
+        self.conv_1x1 = nn.Conv2d(in_channels * 2, in_channels, 1, bias=False)
+
+        self.bn_2 = nn.BatchNorm2d(in_channels)
+
+        self.relu = nn.ReLU(True)
+
+        if in_channels < 512:
+            self.sca = SCA(in_channels,3)
+        else:
+            self.sca = SCA(in_channels,5)
+
+        self.init_weight()
+
+
+    def init_weight(self):
+        for ly in self.children():
+            if isinstance(ly, nn.Conv2d):
+                nn.init.kaiming_normal_(ly.weight, a=1)
+                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
+    def get_params(self):
+        wd_params, nowd_params = [], []
+        for name, module in self.named_modules():
+            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
+                wd_params.append(module.weight)
+                if not module.bias is None:
+                    nowd_params.append(module.bias)
+            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
+                nowd_params += list(module.parameters())
+        return wd_params, nowd_params
+
+
+
+    def forward(self, x ):
+        res = x
+        x1 = self.dw_conv_1(x)
+        x2 = self.bn_1(x1)
+        x2 = self.dw_conv_2(x2)
+        x = torch.cat([x1,x2],dim=1)
+
+        x = self.conv_1x1(x)
+        x = self.bn_2(x)
+        x = self.relu(res + x)
+
+
+        return self.sca(x)
+
+
+class FEB_3(nn.Module):
+    def __init__(self, in_channels, *args, **kwargs):
+        super(FEB_3, self).__init__()
+
+        self.dw_conv_1 = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=1,
+                                   dilation=1, groups=in_channels, bias=False)
+
+        self.bn_1 = nn.BatchNorm2d(in_channels)
+
+        self.dw_conv_2 = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=1,
+                                   dilation=1, groups=in_channels, bias=False)
+
+        self.conv_1x1 = nn.Conv2d(in_channels * 2, in_channels, 1, bias=False)
+
+        self.bn_2 = nn.BatchNorm2d(in_channels)
+
+        self.relu = nn.ReLU(True)
+
+        if in_channels < 512:
+            self.sca = SCA(in_channels,3)
+        else:
+            self.sca = SCA(in_channels,5)
+
+        self.init_weight()
+    def init_weight(self):
+        for ly in self.children():
+            if isinstance(ly, nn.Conv2d):
+                nn.init.kaiming_normal_(ly.weight, a=1)
+                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
+    def get_params(self):
+        wd_params, nowd_params = [], []
+        for name, module in self.named_modules():
+            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
+                wd_params.append(module.weight)
+                if not module.bias is None:
+                    nowd_params.append(module.bias)
+            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
+                nowd_params += list(module.parameters())
+        return wd_params, nowd_params
+
+
+    def forward(self, x):
+        res = x
+        x1 = self.dw_conv_1(x)
+        x2 = self.bn_1(x1)
+        x2 = self.dw_conv_2(x2)
+        x = torch.cat([x1, x2], dim=1)
+
+        x = self.conv_1x1(x)
+        x = self.bn_2(x)
+        x = self.relu(res + x)
+
+        return self.sca(x)
+
+
+
+class FEB_2(nn.Module):
+    def __init__(self, in_channels, *args, **kwargs):
+        super(FEB_2, self).__init__()
+
+        self.conv_1 = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=1,
+                                    bias=False)
+
+        self.bn_1 = nn.BatchNorm2d(in_channels)
+
+        self.conv_2 = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=1,
+                                    bias=False)
+
+        self.bn_2 = nn.BatchNorm2d(in_channels)
+
+        self.relu = nn.ReLU(True)
+
+        if in_channels < 512:
+            self.sca = SCA(in_channels,3)
+        else:
+            self.sca = SCA(in_channels,5)
+
+        self.init_weight()
+    def init_weight(self):
+        for ly in self.children():
+            if isinstance(ly, nn.Conv2d):
+                nn.init.kaiming_normal_(ly.weight, a=1)
+                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
+    def get_params(self):
+        wd_params, nowd_params = [], []
+        for name, module in self.named_modules():
+            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
+                wd_params.append(module.weight)
+                if not module.bias is None:
+                    nowd_params.append(module.bias)
+            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
+                nowd_params += list(module.parameters())
+        return wd_params, nowd_params
+
+
+
+    def forward(self, x):
+        res = x
+
+        x = self.conv_1(x)
+        x = self.bn_1(x)
+        x = self.conv_2(x)
+        x = self.bn_2(x)
+        x = self.relu(res + x)
+
+        return self.sca(x)
+
+
+
+class FEB_1(nn.Module):
+    def __init__(self, *args, **kwargs):
+        super(FEB_1, self).__init__()
+
+
+
+    def init_weight(self):
+        for ly in self.children():
+            if isinstance(ly, nn.Conv2d):
+                nn.init.kaiming_normal_(ly.weight, a=1)
+                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
+    def get_params(self):
+        wd_params, nowd_params = [], []
+        for name, module in self.named_modules():
+            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
+                wd_params.append(module.weight)
+                if not module.bias is None:
+                    nowd_params.append(module.bias)
+            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
+                nowd_params += list(module.parameters())
+        return wd_params, nowd_params
+
+
+    def forward(self, x):
+
+        return x
+
+
+
+class SFA(nn.Module):
+    def __init__(self, cbr_in_channels,feb_in_channels,faa_in_channels,
+                 inter_channels, block, *args, **kwargs):
+
+        super(SFA, self).__init__()
+
+        # if cbr_in_channels ==512:
+        #     self.cbr = CBR(cbr_in_channels, inter_channels,1,1,0)
+        # else:
+        #     self.cbr = CBR(cbr_in_channels, inter_channels,3,1,1)
+
+
+        self.cbr = CBR(cbr_in_channels, inter_channels,1,1,0)
+
+        self.feb = block(feb_in_channels)
+
+        self.faa = FAA(faa_in_channels)
+        self.init_weight()
+
+    def init_weight(self):
+        for ly in self.children():
+            if isinstance(ly, nn.Conv2d):
+                nn.init.kaiming_normal_(ly.weight, a=1)
+                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
+    def get_params(self):
+        wd_params, nowd_params = [], []
+        for name, module in self.named_modules():
+            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
+                wd_params.append(module.weight)
+                if not module.bias is None:
+                    nowd_params.append(module.bias)
+            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
+                nowd_params += list(module.parameters())
+        return wd_params, nowd_params
+
+
+    def forward(self, fh,fl):
+
+        fl = self.cbr(fl)
+        fl = F.interpolate(fl, size=fh.size()[2:], mode='bilinear', align_corners=True)
+
+        fh = self.feb(fh)
+
+        fh = self.faa(fh, fl)
+
+        return fh
+
+
+''' segmentation head'''
 class SegHead(nn.Module):
     def __init__(self, in_channels, inter_channels,  n_classes=19, up_factor=4, *args, **kwargs):
 
@@ -375,7 +677,7 @@ class SegHead(nn.Module):
     def get_params(self):
         wd_params, nowd_params = [], []
         for name, module in self.named_modules():
-            if isinstance(module, (nn.Linear, nn.Conv2d)):
+            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
                 wd_params.append(module.weight)
                 if not module.bias is None:
                     nowd_params.append(module.bias)
@@ -383,6 +685,8 @@ class SegHead(nn.Module):
                 nowd_params += list(module.parameters())
         return wd_params, nowd_params
 
+
+''' backbone network'''
 
 class Backbone(nn.Module):
     def __init__(self, backbone='resnet18', pretrained_base=True, norm_layer=nn.BatchNorm2d):
@@ -415,324 +719,22 @@ class Backbone(nn.Module):
     def get_params(self):
         wd_params, nowd_params = [], []
         for name, module in self.named_modules():
-            if isinstance(module, (nn.Linear, nn.Conv2d)):
-                wd_params.append(module.weight)
-                if not module.bias is None:
-                    nowd_params.append(module.bias)
-            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
-                nowd_params += list(module.parameters())
-        return wd_params, nowd_params
-
-
-class FAA(nn.Module):
-    def __init__(self, in_channels, *args, **kwargs):
-
-        super(FAA, self).__init__()
-
-        self.offset = nn.Conv2d(in_channels * 2, 2, 3, stride=1, padding=1,bias=False)
-
-        if in_channels < 512:
-            self.sca = SCA(in_channels,3)
-        else:
-            self.sca = SCA(in_channels,5)
-        self.init_weight()
-
-    def forward(self, fh, fl):
-
-        n, _, out_h, out_w = fh.size()
-
-
-        x = torch.cat([fh,fl],dim=1)
-
-        offset = self.offset(x)
-
-
-        norm = torch.tensor([[[[out_w, out_h]]]]).type_as(fh).to(fh.device)
-        w = torch.linspace(-1.0, 1.0, out_h).view(-1, 1).repeat(1, out_w)
-        h = torch.linspace(-1.0, 1.0, out_w).repeat(out_h, 1)
-        grid = torch.cat((h.unsqueeze(2), w.unsqueeze(2)), 2)
-        grid = grid.repeat(n, 1, 1, 1).type_as(fh).to(fh.device)
-
-        grid = grid + offset.permute(0, 2, 3, 1) / norm
-
-        fl = F.grid_sample(fl, grid , align_corners=True)  ## 考虑是否指定align_corners
-
-        fh = self.sca(fh + fl)
-
-        return fh
-    def init_weight(self):
-        for ly in self.children():
-            if isinstance(ly, nn.Conv2d):
-                nn.init.kaiming_normal_(ly.weight, a=1)
-                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
-
-    def get_params(self):
-        wd_params, nowd_params = [], []
-        for name, module in self.named_modules():
             if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
                 wd_params.append(module.weight)
                 if not module.bias is None:
                     nowd_params.append(module.bias)
             elif isinstance(module, nn.modules.batchnorm._BatchNorm):
                 nowd_params += list(module.parameters())
-            elif isinstance(module, nn.modules.normalization.LayerNorm):
-                nowd_params += list(module.parameters())
         return wd_params, nowd_params
 
 
-
-class FEB_4(nn.Module):
-    def __init__(self, in_channels, *args, **kwargs):
-
-        super(FEB_4, self).__init__()
-
-        self.dw_conv_1 = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=2,
-                                 dilation=2, groups=in_channels,bias=False)
-
-        self.bn_1 = nn.BatchNorm2d(in_channels)
-
-        self.dw_conv_2 = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=5,
-                                 dilation=5, groups=in_channels,bias=False)
-
-        self.conv_1x1 = nn.Conv2d(in_channels * 2, in_channels, 1, bias=False)
-
-        self.bn_2 = nn.BatchNorm2d(in_channels)
-
-        self.relu = nn.ReLU(True)
-
-        if in_channels < 512:
-            self.sca = SCA(in_channels,3)
-        else:
-            self.sca = SCA(in_channels,5)
-
-        self.init_weight()
-
-    def forward(self, x ):
-        res = x
-        x1 = self.dw_conv_1(x)
-        x2 = self.bn_1(x1)
-        x2 = self.dw_conv_2(x2)
-        x = torch.cat([x1,x2],dim=1)
-
-        x = self.conv_1x1(x)
-        x = self.bn_2(x)
-        x = self.relu(res + x)
-
-
-        return self.sca(x)
-    def init_weight(self):
-        for ly in self.children():
-            if isinstance(ly, nn.Conv2d):
-                nn.init.kaiming_normal_(ly.weight, a=1)
-                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
-
-    def get_params(self):
-        wd_params, nowd_params = [], []
-        for name, module in self.named_modules():
-            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
-                wd_params.append(module.weight)
-                if not module.bias is None:
-                    nowd_params.append(module.bias)
-            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
-                nowd_params += list(module.parameters())
-            elif isinstance(module, nn.modules.normalization.LayerNorm):
-                nowd_params += list(module.parameters())
-        return wd_params, nowd_params
-
-
-class FEB_3(nn.Module):
-    def __init__(self, in_channels, *args, **kwargs):
-        super(FEB_3, self).__init__()
-
-        self.dw_conv_1 = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=1,
-                                   dilation=1, groups=in_channels, bias=False)
-
-        self.bn_1 = nn.BatchNorm2d(in_channels)
-
-        self.dw_conv_2 = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=1,
-                                   dilation=1, groups=in_channels, bias=False)
-
-        self.conv_1x1 = nn.Conv2d(in_channels * 2, in_channels, 1, bias=False)
-
-        self.bn_2 = nn.BatchNorm2d(in_channels)
-
-        self.relu = nn.ReLU(True)
-
-        if in_channels < 512:
-            self.sca = SCA(in_channels,3)
-        else:
-            self.sca = SCA(in_channels,5)
-        self.init_weight()
-
-    def forward(self, x):
-        res = x
-        x1 = self.dw_conv_1(x)
-        x2 = self.bn_1(x1)
-        x2 = self.dw_conv_2(x2)
-        x = torch.cat([x1, x2], dim=1)
-
-        x = self.conv_1x1(x)
-        x = self.bn_2(x)
-        x = self.relu(res + x)
-
-        return self.sca(x)
-
-    def init_weight(self):
-        for ly in self.children():
-            if isinstance(ly, nn.Conv2d):
-                nn.init.kaiming_normal_(ly.weight, a=1)
-                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
-
-    def get_params(self):
-        wd_params, nowd_params = [], []
-        for name, module in self.named_modules():
-            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
-                wd_params.append(module.weight)
-                if not module.bias is None:
-                    nowd_params.append(module.bias)
-            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
-                nowd_params += list(module.parameters())
-            elif isinstance(module, nn.modules.normalization.LayerNorm):
-                nowd_params += list(module.parameters())
-        return wd_params, nowd_params
-
-
-class FEB_2(nn.Module):
-    def __init__(self, in_channels, *args, **kwargs):
-        super(FEB_2, self).__init__()
-
-        self.conv_1 = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=1,
-                                    bias=False)
-
-        self.bn_1 = nn.BatchNorm2d(in_channels)
-
-        self.conv_2 = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=1,
-                                    bias=False)
-
-        self.bn_2 = nn.BatchNorm2d(in_channels)
-
-        self.relu = nn.ReLU(True)
-
-        if in_channels < 512:
-            self.sca = SCA(in_channels,3)
-        else:
-            self.sca = SCA(in_channels,5)
-        self.init_weight()
-
-
-    def forward(self, x):
-        res = x
-
-        x = self.conv_1(x)
-        x = self.bn_1(x)
-        x = self.conv_2(x)
-        x = self.bn_2(x)
-        x = self.relu(res + x)
-
-        return self.sca(x)
-
-
-    def init_weight(self):
-        for ly in self.children():
-            if isinstance(ly, nn.Conv2d):
-                nn.init.kaiming_normal_(ly.weight, a=1)
-                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
-
-    def get_params(self):
-        wd_params, nowd_params = [], []
-        for name, module in self.named_modules():
-            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
-                wd_params.append(module.weight)
-                if not module.bias is None:
-                    nowd_params.append(module.bias)
-            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
-                nowd_params += list(module.parameters())
-            elif isinstance(module, nn.modules.normalization.LayerNorm):
-                nowd_params += list(module.parameters())
-        return wd_params, nowd_params
-
-class FEB_1(nn.Module):
-    def __init__(self, *args, **kwargs):
-        super(FEB_1, self).__init__()
-
-    def forward(self, x):
-
-        return x
-
-    def init_weight(self):
-        for ly in self.children():
-            if isinstance(ly, nn.Conv2d):
-                nn.init.kaiming_normal_(ly.weight, a=1)
-                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
-
-    def get_params(self):
-        wd_params, nowd_params = [], []
-        for name, module in self.named_modules():
-            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
-                wd_params.append(module.weight)
-                if not module.bias is None:
-                    nowd_params.append(module.bias)
-            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
-                nowd_params += list(module.parameters())
-            elif isinstance(module, nn.modules.normalization.LayerNorm):
-                nowd_params += list(module.parameters())
-        return wd_params, nowd_params
-
-
-class SFA(nn.Module):
-    def __init__(self, cbr_in_channels,feb_in_channels,faa_in_channels,
-                 inter_channels, block, *args, **kwargs):
-
-        super(SFA, self).__init__()
-
-        # if cbr_in_channels ==512:
-        #     self.cbr = CBR(cbr_in_channels, inter_channels,1,1,0)
-        # else:
-        #     self.cbr = CBR(cbr_in_channels, inter_channels,3,1,1)
-
-
-        self.cbr = CBR(cbr_in_channels, inter_channels,1,1,0)
-
-        self.feb = block(feb_in_channels)
-
-        self.faa = FAA(faa_in_channels)
-        self.init_weight()
-
-    def forward(self, fh,fl):
-
-        fl = self.cbr(fl)
-        fl = F.interpolate(fl, size=fh.size()[2:], mode='bilinear', align_corners=True)
-
-        fh = self.feb(fh)
-
-        fh = self.faa(fh, fl)
-
-        return fh
-    def init_weight(self):
-        for ly in self.children():
-            if isinstance(ly, nn.Conv2d):
-                nn.init.kaiming_normal_(ly.weight, a=1)
-                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
-
-    def get_params(self):
-        wd_params, nowd_params = [], []
-        for name, module in self.named_modules():
-            if isinstance(module, (nn.Linear, nn.Conv2d,nn.Conv1d)):
-                wd_params.append(module.weight)
-                if not module.bias is None:
-                    nowd_params.append(module.bias)
-            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
-                nowd_params += list(module.parameters())
-            elif isinstance(module, nn.modules.normalization.LayerNorm):
-                nowd_params += list(module.parameters())
-        return wd_params, nowd_params
-
+''' whole network'''
 class SFANet(nn.Module):
     '''
         Stage-Aware Feature Alignment Network for Real-Time Semantic Segmentation of Street Scenes
     '''
 
-    def __init__(self, n_classes=19, output_aux=False, *args, **kwargs):
+    def __init__(self, n_classes=19, output_aux=True, *args, **kwargs):
         super(SFANet, self).__init__()
         self.resnet = Backbone()
 
@@ -745,10 +747,10 @@ class SFANet(nn.Module):
 
         self.output_aux = output_aux
         if self.output_aux:
-            self.conv_out4 = SegHead(128, 64, n_classes, up_factor=32)
-            self.conv_out3 = SegHead(128, 64, n_classes, up_factor=16)
-            self.conv_out2 = SegHead(128, 64, n_classes, up_factor=8)
             self.conv_out1 = SegHead(64, 64, n_classes, up_factor=4)
+            self.conv_out2 = SegHead(128, 64, n_classes, up_factor=8)
+            self.conv_out3 = SegHead(128, 64, n_classes, up_factor=16)
+            self.conv_out4 = SegHead(128, 64, n_classes, up_factor=32)
 
     def forward(self, x):
         # 128
@@ -763,12 +765,11 @@ class SFANet(nn.Module):
         f = self.conv_out(f)
 
         if self.output_aux:
-            aux4 = self.conv_out4(sfa4)
-            aux3 = self.conv_out3(sfa3)
-            aux2 = self.conv_out2(sfa2)
             aux1 = self.conv_out1(sfa1)
-
-            return f, aux1, aux2, aux3, aux4
+            aux2 = self.conv_out2(sfa2)
+            aux3 = self.conv_out3(sfa3)
+            aux4 = self.conv_out4(sfa4)
+            return f, aux1 , aux2 , aux3 , aux4
 
         f = f.argmax(dim=1)
         return f
@@ -778,8 +779,9 @@ class SFANet(nn.Module):
     def get_params(self):
         wd_params, nowd_params, lr_mul_wd_params, lr_mul_nowd_params = [], [], [], []
         for name, child in self.named_children():
+            #child为自定义的各个模块的名称 如 acm
             child_wd_params, child_nowd_params = child.get_params()
-            if isinstance(child, (SFA,SegHead)):
+            if isinstance(child, (SegHead)):
                 lr_mul_wd_params += child_wd_params
                 lr_mul_nowd_params += child_nowd_params
             else:
@@ -801,17 +803,20 @@ if __name__ == "__main__":
     model.eval()
     print(model)
 
-    model.get_params()
-
     input = torch.rand(1,3,1024,2048)
 
     out = model(input)
 
+    print(out[0].shape)
     print(out[1].shape)
+    print(out[2].shape)
+    print(out[3].shape)
+    print(out[4].shape)
 
+    model.get_params()
 
-    from thop import profile, clever_format
-
-    macs, params = profile(model, inputs=(input,))
-    macs, params = clever_format([macs, params], "%.4f")
-    print('flops,', macs, 'params', params)
+    # from thop import profile, clever_format
+    #
+    # macs, params = profile(model, inputs=(input,))
+    # macs, params = clever_format([macs, params], "%.4f")
+    # print('flops,', macs, 'params', params)
