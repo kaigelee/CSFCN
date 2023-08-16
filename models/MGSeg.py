@@ -260,7 +260,7 @@ class S_LWA(nn.Module):
     def __init__(self, in_channel,out_channel):
         super(S_LWA, self).__init__()
 
-        self.reduce = CBR(in_channel,out_channel)
+        self.reduce = CBR(in_channel,out_channel,3,1,1)
 
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         self.fc = nn.Sequential(
@@ -311,6 +311,7 @@ class LWA(nn.Module):
             nn.Linear(out_channel // reduction, out_channel, bias=False),
             nn.Sigmoid()
         )
+
         self.init_weight()
 
     def forward(self, x):
@@ -391,7 +392,6 @@ class HAFA(nn.Module):
 
         p1 = self.q3_conv(f1 + p2)
 
-
         p3 = self.p3_conv(p3)
         p2 = self.p2_conv(p2)
         p1 = self.p1_conv(p1)
@@ -439,8 +439,8 @@ class GWL(nn.Module):
             nn.Conv2d(128, 152, kernel_size=1,
                       stride=1, padding=0, bias=False)
         )
-        self.GC_conv = nn.Conv2d(152, 19 * 4, kernel_size=1,
-                      stride=1, padding=0, bias=False, groups=19)
+        self.GC_conv = nn.Conv2d(152, 19 * 4, kernel_size=3,
+                      stride=1, padding=1, bias=False, groups=19)
         self.init_weight()
 
     def forward(self, q5):
@@ -534,16 +534,56 @@ class FGR(nn.Module):
         return wd_params, nowd_params
 
 
+
+class SegHead(nn.Module):
+
+    def __init__(self, in_chan, mid_chan, n_classes, up_factor=32, *args, **kwargs):
+        super(SegHead, self).__init__()
+        self.up_factor = up_factor
+        out_chan = n_classes * up_factor * up_factor
+        self.conv = CBR(in_chan, mid_chan,3,1,1)
+        self.conv_out = nn.Conv2d(mid_chan, out_chan, kernel_size=1, bias=True)
+        self.up = nn.PixelShuffle(up_factor)
+        self.init_weight()
+
+    def forward(self, x):
+        x = self.conv(x)
+        x = self.conv_out(x)
+        x = self.up(x)
+        return x
+
+    def init_weight(self):
+        for ly in self.children():
+            if isinstance(ly, nn.Conv2d):
+                nn.init.kaiming_normal_(ly.weight, a=1)
+                if not ly.bias is None: nn.init.constant_(ly.bias, 0)
+
+    def get_params(self):
+        wd_params, nowd_params = [], []
+        for name, module in self.named_modules():
+            if isinstance(module, (nn.Linear, nn.Conv2d)):
+                wd_params.append(module.weight)
+                if not module.bias is None:
+                    nowd_params.append(module.bias)
+            elif isinstance(module, nn.modules.batchnorm._BatchNorm):
+                nowd_params += list(module.parameters())
+        return wd_params, nowd_params
+
 class MGSeg(nn.Module):
     '''
         MGSeg: Multiple Granularity-Based Real-Time Semantic Segmentation Network
     '''
 
-    def __init__(self, n_classes=19, output_aux=False, *args, **kwargs):
+    def __init__(self, n_classes=19, output_aux=True, *args, **kwargs):
         super(MGSeg, self).__init__()
         self.resnet = Backbone()
         self.hafa = HAFA()
         self.fgr = FGR()
+
+        self.output_aux = output_aux
+        if self.output_aux:
+            self.conv_out16 = SegHead(256, 64, n_classes, up_factor=16)
+
 
     def forward(self, x):
         # 128
@@ -554,9 +594,16 @@ class MGSeg(nn.Module):
         # q5, f3, f2, f1, pred
         h = self.fgr(feat32, f3, f2, f1, pred)
 
-        h = F.interpolate(h,scale_factor=8,mode='bilinear',align_corners=True) # 1/16
+        h = F.interpolate(h,scale_factor=8,mode='bilinear',align_corners=True) # 1/8
 
+        if self.output_aux:
+            aux1 = self.conv_out16(dsn)
+            pred = F.interpolate(pred, scale_factor=8, mode='bilinear', align_corners=True)  # 1/8
+            return h, pred, aux1
+
+        h = h.argmax(dim=1)
         return h
+
 
 
     def get_params(self):
@@ -582,7 +629,7 @@ if __name__ == "__main__":
 
     print(b) # 3335
 
-    model = MGSeg()
+    model = MGSeg(output_aux=True)
     model.eval()
     print(model)
 
@@ -590,4 +637,10 @@ if __name__ == "__main__":
 
     out = model(input)
 
-    print(out.shape)
+    print(out[2].shape)
+
+    from thop import profile, clever_format
+
+    macs, params = profile(model, inputs=(input,))
+    macs, params = clever_format([macs, params], "%.4f")
+    print('flops,', macs, 'params', params)
