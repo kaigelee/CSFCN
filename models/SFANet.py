@@ -108,7 +108,7 @@ class SCA(nn.Module):
 
         self.spatial = nn.Sequential(
             nn.Conv2d(in_chan,
-                in_chan,
+                1,
                 kernel_size = 1,
                 bias = False),
             nn.Sigmoid()
