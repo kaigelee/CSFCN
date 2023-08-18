@@ -154,25 +154,14 @@ python tools/custom.py --p '../pretrained_models/cityscapes/CSFCN_best_model.pth
 
 ## Model Zoo
 
-Results and models are available in the [model zoo](docs/en/model_zoo.md).
+For fair comparison, we have reproduced some related methods.
 
 <details open>
-<summary>Supported backbones:</summary>
+<summary>Supported methods:</summary>
 
-- [x] ResNet (CVPR'2016)
-- [x] ResNeXt (CVPR'2017)
-- [x] [HRNet (CVPR'2019)](configs/hrnet)
-- [x] [ResNeSt (ArXiv'2020)](configs/resnest)
-- [x] [MobileNetV2 (CVPR'2018)](configs/mobilenet_v2)
-- [x] [MobileNetV3 (ICCV'2019)](configs/mobilenet_v3)
-- [x] [Vision Transformer (ICLR'2021)](configs/vit)
-- [x] [Swin Transformer (ICCV'2021)](configs/swin)
-- [x] [Twins (NeurIPS'2021)](configs/twins)
-- [x] [BEiT (ICLR'2022)](configs/beit)
-- [x] [ConvNeXt (CVPR'2022)](configs/convnext)
-- [x] [MAE (CVPR'2022)](configs/mae)
-- [x] [PoolFormer (CVPR'2022)](configs/poolformer)
-- [x] [SegNeXt (NeurIPS'2022)](configs/segnext)
+- [x] [SFANet (T-ITS'2021)](models/SFANet)
+- [x] [MGSeg (TIP'2021)](models/MGSeg)
+- [x] [ICNet (ECCV'2018)](models/icnet)
 
 </details>
 
