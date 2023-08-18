@@ -152,6 +152,17 @@ python tools/custom.py --p '../pretrained_models/cityscapes/CSFCN_best_model.pth
 - [ ] Organize all codes and upload them
 - [ ] Release complete config, network and training files
 
+## Model Zoo
+
+<summary>Supported methods:</summary>
+
+- [x] [FCN (CVPR'2015/TPAMI'2017)]
+- [x] [ERFNet (T-ITS'2017)]
+
+</details>
+
+<details open>
+
 
 ## Acknowledgements
 
