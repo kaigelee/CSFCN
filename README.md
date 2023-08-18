@@ -159,9 +159,9 @@ For fair comparison, we have reproduced some related methods.
 <details open>
 <summary>Supported methods:</summary>
 
-- [x] [SFANet (T-ITS'2021)](models/SFANet)
-- [x] [MGSeg (TIP'2021)](models/MGSeg)
-- [x] [ICNet (ECCV'2018)](models/icnet)
+- [x] [SFANet (T-ITS'2021)](models/SFANet.py)
+- [x] [MGSeg (TIP'2021)](models/MGSeg.py)
+- [x] [ICNet (ECCV'2018)](models/icnet.py)
 
 </details>
 
