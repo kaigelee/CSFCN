@@ -153,6 +153,7 @@ python tools/custom.py --p '../pretrained_models/cityscapes/CSFCN_best_model.pth
 - [ ] Release complete config, network and training files
 
 ## Model Zoo
+</details>
 
 <summary>Supported methods:</summary>
 
