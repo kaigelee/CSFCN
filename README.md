@@ -153,16 +153,28 @@ python tools/custom.py --p '../pretrained_models/cityscapes/CSFCN_best_model.pth
 - [ ] Release complete config, network and training files
 
 ## Model Zoo
-</details>
 
-<summary>Supported methods:</summary>
-
-- [x] [FCN (CVPR'2015/TPAMI'2017)]
-- [x] [ERFNet (T-ITS'2017)]
-
-</details>
+Results and models are available in the [model zoo](docs/en/model_zoo.md).
 
 <details open>
+<summary>Supported backbones:</summary>
+
+- [x] ResNet (CVPR'2016)
+- [x] ResNeXt (CVPR'2017)
+- [x] [HRNet (CVPR'2019)](configs/hrnet)
+- [x] [ResNeSt (ArXiv'2020)](configs/resnest)
+- [x] [MobileNetV2 (CVPR'2018)](configs/mobilenet_v2)
+- [x] [MobileNetV3 (ICCV'2019)](configs/mobilenet_v3)
+- [x] [Vision Transformer (ICLR'2021)](configs/vit)
+- [x] [Swin Transformer (ICCV'2021)](configs/swin)
+- [x] [Twins (NeurIPS'2021)](configs/twins)
+- [x] [BEiT (ICLR'2022)](configs/beit)
+- [x] [ConvNeXt (CVPR'2022)](configs/convnext)
+- [x] [MAE (CVPR'2022)](configs/mae)
+- [x] [PoolFormer (CVPR'2022)](configs/poolformer)
+- [x] [SegNeXt (NeurIPS'2022)](configs/segnext)
+
+</details>
 
 
 ## Acknowledgements
