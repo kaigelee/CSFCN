@@ -157,7 +157,7 @@ python tools/custom.py --p '../pretrained_models/cityscapes/CSFCN_best_model.pth
 For fair comparison, we have reproduced some related methods.
 
 <details open>
-<summary>Supported methods:</summary>
+<summary>Methods:</summary>
 
 - [x] [SFANet (T-ITS'2021)](models/SFANet.py)
 - [x] [MGSeg (TIP'2021)](models/MGSeg.py)
@@ -165,6 +165,7 @@ For fair comparison, we have reproduced some related methods.
 
 </details>
 
+In the future, we will open source more real-time semantic segmentation method codes (e.g., BiSeNet and SwiftNet).
 
 ## Acknowledgements
 
