@@ -64,6 +64,8 @@ CFC and SFC blocks are responsiable for context feature calibration, spatial fea
 
 :smiley_cat: The inference time is measured under torch 1.7.1, CUDA 11.0, and CUDNN 7.6.5 on a single NVIDIA GTX 1080Ti GPU card with a batch size 1.
 
+:smiley_cat: Our method can still maintain better real-time performance on RTX 2080 Super Max-Q.
+
 
 
 
