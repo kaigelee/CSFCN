@@ -7,6 +7,8 @@
 
 - The code for our method will be open-sourced after review.
 - We initially reproduced SFANet and MGSeg based on the original papers for a detailed comparison with them.
+- We validate the validity of our reproductions, which achieve comparable performance to those in the original paper.
+
 
 
 
