@@ -166,6 +166,14 @@ For fair comparison, we have reproduced some related methods.
 
 </details>
 
+<details open>
+<summary>Links:</summary>
+
+- [x] [SwiftNet (PR'2021)](https://github.com/orsic/swiftnet)
+- [x] [BiSeNet (ECCV'2018, IJCV'2021)]([models/MGSeg.py](https://github.com/CoinCheung/BiSeNet))
+
+</details>
+
 In the future, we will open source more real-time semantic segmentation method codes (e.g., BiSeNet and SwiftNet).
 
 ## Acknowledgements
