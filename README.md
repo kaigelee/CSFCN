@@ -57,7 +57,7 @@ CFC and SFC blocks are responsiable for context feature calibration, spatial fea
 
 :bell: Our Cityscapes pre-trained CSFCN obtains 81.0% mIoU on the CamVid set.
  
-| Model (CamVid) | Val (% mIOU) | Test (% mIOU)| FPS (GTX 1080 Ti) | FPS (RTX 2080<br>Super Max-Q) |
+| Model (CamVid) | Val (% mIOU) | Test (% mIOU)| FPS (GTX 1080 Ti) | FPS (RTX 2080 Super Max-Q) |
 |:-:|:-:|:-:|:-:|:-:|
 | CSFCN |-| 77.8 | 179.2 | 101.8 | 
 | CSFCN-P |-| 81.0 | 179.2 | 101.8 | 
