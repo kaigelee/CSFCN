@@ -149,6 +149,13 @@ python models/speed/CSFCN_speed.py --c 11 --r 720 960
 python tools/custom.py --p '../pretrained_models/cityscapes/CSFCN_best_model.pth' --t '*.png'
 ````
 
+You should end up seeing images that look like the following:
+
+<p align="center">
+  <img src="figs/output.png" alt="overview-of-our-method" width="500"/></br>
+  <span align="center">Custom Output. </span> 
+</p>
+
 
 ## TODO
 - [ ] Refactor and clean code
