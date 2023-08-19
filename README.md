@@ -3,7 +3,7 @@
 
 By Kaige Li, Qichuan Geng, Maoxian Wan, Xiaochun Cao, Senior Member, IEEE, and Zhong Zhou. This repository is an official implementation of the paper "Context and Spatial Feature Calibration for Real-Time Semantic Segmentation", which is under review. The full code will be released after review.
 
-## Highlights
+## 🔥 Highlights
 <p align="center">
   <img src="figs/city_score.png" alt="overview-of-our-method" width="500"/></br>
   <span align="center">Comparison of inference speed and accuracy for real-time models on test set of Cityscapes.</span> 
@@ -14,7 +14,7 @@ By Kaige Li, Qichuan Geng, Maoxian Wan, Xiaochun Cao, Senior Member, IEEE, and Z
 feature misalignment via pooling-based and sampling-based attention mechanisms.
 * **More Accurate and Faster**: CSFCN presents 78.7% mIOU with speed of 70.0 FPS on Cityscapes test set and 77.8% mIOU with speed of 179.2 FPS on CamVid test set.
 
-## 🎉 Updates 🎉
+## 🎉 Updates 
    - Our paper is undergoing a second peer review. In the meantime, we have prepared a preprint and will post a link to it soon. (Aug/06/2023)
    - The overview, training logs, and some codes for CSFCN are available here. (Aug/08/2022)
    - We reproduced the network files of [SFANet](https://ieeexplore.ieee.org/abstract/document/9583294) and [MGSeg](https://ieeexplore.ieee.org/abstract/document/9511235) for comparison with them. (Aug/16/2022)
