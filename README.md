@@ -49,11 +49,11 @@ CFC and SFC blocks are responsiable for context feature calibration, spatial fea
 
 :bell: We append 50, 75 and 100 after the network name to represent the input sizes of 512 × 1024, 768 × 1536 and 1024 × 2048, respectively.
 
-| Model (Cityscapes) | Val (% mIOU) |Test (% mIOU)| FPS (GTX 1080 Ti) |
-|:-:|:-:|:-:|:-:|
-| CSFCN-50 | 74.0 | 73.8 | 229.1 |
-| CSFCN-75 | 77.3 |77.2 | 122.2  |
-| CSFCN-100 | 79.0 |78.7 | 70.0 |
+| Model (Cityscapes) | Val (% mIOU) |Test (% mIOU)| FPS (GTX 1080 Ti) | FPS (RTX 2080<br>Super Max-Q) |
+|:-:|:-:|:-:|:-:|:-:|
+| CSFCN-50 | 74.0 | 73.8 | 229.1 | 113.4 | 
+| CSFCN-75 | 77.3 |77.2 | 122.2  | 65.6 |
+| CSFCN-100 | 79.0 |78.7 | 70.0 |  37.9|
 
 :bell: Our Cityscapes pre-trained CSFCN obtains 81.0% mIoU on the CamVid set.
 
