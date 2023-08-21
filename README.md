@@ -154,7 +154,7 @@ python tools/custom.py --p '../pretrained_models/cityscapes/CSFCN_best_model.pth
 You should end up seeing images that look like the following:
 
 <p align="center">
-  <img src="figs/output.png" alt="overview-of-our-method" width="500"/></br>
+  <img src="figs/demo_output.png" alt="overview-of-our-method" width="500"/></br>
   <span align="center">Custom Output. </span> 
 </p>
 
