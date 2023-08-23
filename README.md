@@ -187,7 +187,7 @@ For fair comparison, we have reproduced some related methods.
 
 </details>
 
-In the future, we will open source more real-time semantic segmentation method codes (e.g., BiSeNet and SwiftNet).
+In the future, we will open source the codes of more real-time semantic segmentation methods  (e.g., MSFNet).
 
 ## Acknowledgements
 
