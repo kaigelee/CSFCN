@@ -1,6 +1,6 @@
 import torch
 from torch2trt import torch2trt
-from sanet import get_pred_model
+from csfcn import get_pred_model
 import time
 import numpy as np
 # create some regular pytorch model...
