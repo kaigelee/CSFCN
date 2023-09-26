@@ -21,6 +21,8 @@ feature misalignment via pooling-based and sampling-based attention mechanisms.
    - The overview, training logs, and some codes for CSFCN are available here. (Aug/08/2022)
    - We reproduced the network files of [SFANet](https://ieeexplore.ieee.org/abstract/document/9583294) and [MGSeg](https://ieeexplore.ieee.org/abstract/document/9511235) for comparison with them. (Aug/16/2022)
    - We validate the validity of our reproductions, which achieve comparable performance to those in the original paper. (Aug/19/2022)
+   - We’ve updated how to use TensorRT to accelerate network inference. (Sep/26/2022)
+
 
 
 
@@ -133,6 +135,7 @@ python tools/submit.py --cfg configs/CSFCN_cityscapes_trainval.yaml \
 #### 3.0 Latency measurement tools
 
 * If you have successfully installed [TensorRT](https://github.com/chenwydj/FasterSeg#installation), you will automatically use TensorRT for the following latency tests (see [function](https://github.com/chenwydj/FasterSeg/blob/master/tools/utils/darts_utils.py#L167) here).
+* Or you can implement TensorRT inference based on the guidance of [torch2trt](https://nvidia-ai-iot.github.io/torch2trt/master/usage/basic_usage.html). (recommended)  🔥
 * Otherwise you will be switched to use Pytorch for the latency tests  (see [function](https://github.com/chenwydj/FasterSeg/blob/master/tools/utils/darts_utils.py#L184) here).
 
 #### 3.1 Measure the speed of the CSFCN
