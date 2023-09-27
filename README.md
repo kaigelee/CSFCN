@@ -22,6 +22,8 @@ feature misalignment via pooling-based and sampling-based attention mechanisms.
    - We reproduced the network files of [SFANet](https://ieeexplore.ieee.org/abstract/document/9583294) and [MGSeg](https://ieeexplore.ieee.org/abstract/document/9511235) for comparison with them. (Aug/16/2022)
    - We validate the validity of our reproductions, which achieve comparable performance to those in the original paper. (Aug/19/2022)
    - We’ve updated how to use TensorRT to accelerate network inference. (Sep/26/2022)
+   - We find the design of *Real-Time Single Image and Video Super-Resolution Using an Efficient Sub-Pixel Convolutional Neural Network, CVPR 2016* could further improve performance, so we recommend using it to build networks. (Sep/27/2022)
+
 
 
 
