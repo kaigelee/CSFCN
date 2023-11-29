@@ -23,7 +23,9 @@ feature misalignment via pooling-based and sampling-based attention mechanisms.
    - We validate the validity of our reproductions, which achieve comparable performance to those in the original paper. (Aug/19/2022)
    - We’ve updated how to use TensorRT to accelerate network inference. (Sep/26/2022)
    - We find the design of *Real-Time Single Image and Video Super-Resolution Using an Efficient Sub-Pixel Convolutional Neural Network, CVPR 2016* could further improve performance, so we recommend using it to build networks. (Sep/27/2022)
-   - We open sourced network files based on pixelshuffle [CSFCN](https://github.com/kaigelee/CSFCN/blob/main/models/csfcn.py).
+   - We open sourced network files based on pixelshuffle [CSFCN](https://github.com/kaigelee/CSFCN/blob/main/models/csfcn.py). Please note that some hyperparameters of the module still need to be standardized, which we are working on.
+
+
 
 
 
