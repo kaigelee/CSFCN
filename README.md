@@ -5,6 +5,8 @@
 
 By Kaige Li, Qichuan Geng, Maoxian Wan, Xiaochun Cao, Senior Member, IEEE, and Zhong Zhou. This repository is an official implementation of the paper "Context and Spatial Feature Calibration for Real-Time Semantic Segmentation", which is under review. The full code will be released after review.
 
+We have open sourced the original network files, but the overall project still needs to be refactored, which is what we will do in the future.
+
 ## 🔥 Highlights
 <p align="center">
   <img src="figs/city_score.png" alt="overview-of-our-method" width="500"/></br>
