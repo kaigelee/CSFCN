@@ -111,11 +111,11 @@ pip install -r requirements.txt -f https://download.pytorch.org/whl/torch_stable
 * Download the ImageNet pretrained models and put them into `pretrained_models/imagenet/` dir.
 * For example, train the CSFCN on Cityscapes with batch size of 12 on one GPU (e.g., 3090):
 ````bash
-python tools/train.py --cfg configs/CSFCN_cityscapes.yaml
+python train.py --cfg configs/CSFCN_cityscapes.yaml
 ````
 * Or train the CSFCN on Cityscapes using train and val sets simultaneously with batch size of 12 on one GPU:
 ````bash
-python tools/trainval.py --cfg configs/CSFCN_cityscapes_trainval.yaml
+python trainval.py --cfg configs/CSFCN_cityscapes_trainval.yaml
 ````
 
 ### 2. Evaluation
