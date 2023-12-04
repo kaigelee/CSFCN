@@ -17,6 +17,7 @@ train:
   train_batch_size: 12      # adjust according to gpu resources
   valid_batch_size: 1
   cityscapes_root: "/data/cityscapes"
+  pretrained: "/models/pretrained.pth"
   epochs: 480
   log_iter: 10        # print log every log-iter
   val_epoch: 1        # run validation every val-epoch
